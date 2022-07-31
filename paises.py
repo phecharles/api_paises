@@ -1,8 +1,10 @@
+import sys
+
 import requests
 import json
 
 URL_ALL = "https://restcountries.com/v2/all"
-URL_NAME = "https://restcountries.com/v2/name/brazil"
+URL_NAME = "https://restcountries.com/v2/name"
 
 def requisicao(url):
     try:
@@ -26,13 +28,33 @@ def listar_paises(lista_de_paises):
     for pais in lista_de_paises:
         print(pais['name'])
 
+def mostrar_populacao(nome_pais):
+    resposta = requisicao("{}/{}".format(URL_NAME, nome_pais))
+    if resposta:
+        lista_paises = parsing(resposta)
+        if lista_paises:
+            for pais in lista_paises:
+                print("População do {}: {}".format(pais['name'], pais['population']))
+    else:
+        print("País não encontrado!")
+
+def mostrar_moedas(nome_pais):
+    resposta = requisicao("{}/{}".format(URL_NAME, nome_pais))
+    if resposta:
+        lista_paises = parsing(resposta)
+        if lista_paises:
+            for pais in lista_paises:
+                print("Moedas do {}".format(pais['name']))
+                moedas = pais['currencies']
+                for moeda in moedas:
+                    print(moeda)
+    else:
+        print("País não encontrado!")
+
 
 if __name__ == "__main__":
-    texto_da_resposta = requisicao(URL_ALL)
-    if texto_da_resposta:
-        lista_paises = parsing(texto_da_resposta)
-        if lista_paises:
-            contagem(lista_paises)
-            listar_paises(lista_paises)
+    # mostrar_populacao("brazil")
+    # mostrar_moedas("brazil")
 
+    print(sys.argv)
 
